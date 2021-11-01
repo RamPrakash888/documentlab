@@ -1,0 +1,2518 @@
+EXP NO: 01                                                                                                                 Name: 1
+DATE:  3/8/2021                                                                                                                      Roll No: 1   
+            
+    Develop an application that uses GUI components, Font and Colours
+Aim:
+        To Develop an application that uses GUI components, Font and Colours.
+Problem Description:
+To develop an application that uses GUI components like text, Images,  Font and Colors.
+
+Basics of Topic:
+GUI components
+Flutter has many GUI components, like flutter button,  flutter image, cards, tab, app bar, search bar, dropdown, animation, checkbox,etc.
+This reduces your overall app development time ecause of its pre-build clean UI widget component that you can use in flutter app development. 
+Fonts
+Flutter works with custom fonts and you can apply a custom font across an entire app or to individual widgets. This recipe creates an app that uses custom fonts with the following steps:
+1.	Import the font files.
+2.	Declare the font in the pubspec.
+3.	Set a font as the default.
+4.	Use a font in a specific widget.
+Colours
+Color and ColorSwatch constants which represent Material design's color palette.
+Instead of using an absolute color from these palettes, consider using Theme.of to obtain the local ThemeData.colorScheme, which defines the colors that most of the Material components use by default.
+
+Source Code:
+main.dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Hello World Demo Application',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Hello World Demo'),
+          backgroundColor: Colors.purple,
+        ),
+        body: const Center(
+            child: Text('Hello World!!!',
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple))),
+      ),
+    );
+  }
+}
+
+Output:
+ 
+
+Result:
+          An application that uses GUI components, Font and Colours has been developed and executed.
+
+EXP NO:02                                                                                                                  Name: 1
+DATE:09/08/21                                                                                                                       Roll No: 1   
+            
+        Develop an application that uses Layout Managers and event listeners.
+Aim:
+        To Develop an application that uses Layout Managers and event listeners.
+Problem Description:
+The primary goal is to build an login screen for chat app which uses different Layout Managers and Event Listeners.
+Basics of Topic:
+Flutter is an open-source UI software development kit created by Google. It is used to develop cross platform applications for Android, iOS, Linux, Mac, Windows, Google Fuchsia, and the web from a single codebase. 
+
+                                                       
+Source Code:
+main.dart
+
+
+import 'package:chatapp/signin.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+//import 'package:chatapp/signup.dart';
+import 'package:flutter/material.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: signin(),
+    );
+  }
+}
+
+Signin.dart:-
+
+import 'package:chatapp/home.dart';
+import 'package:chatapp/signup.dart';
+import 'package:chatapp/tempwidget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+class signin extends StatefulWidget {
+  const signin({Key? key}) : super(key: key);
+
+  @override
+  _signinState createState() => _signinState();
+}
+
+class _signinState extends State<signin> {
+
+
+
+ final _formkey=GlobalKey<FormState>();
+  TextEditingController emailid = new TextEditingController();
+  TextEditingController  passwd = new TextEditingController();
+ final _auth=FirebaseAuth.instance;
+
+
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text("UChat",style: TextStyle(fontSize: 40),),
+        centerTitle: true,
+      ),
+      body:
+      Container(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Form(
+            key: _formkey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("LoGiN",style: TextStyle(color: Colors.white,fontSize: 50),),
+                SizedBox(
+                  height: 40,
+                ),
+                TextFormField(
+
+                   controller: emailid,
+                    onSaved: (value){
+                     emailid.text=value!;
+                    },
+                    validator: (value){
+                     if(value!.isEmpty){
+                       return("Please enter your email");
+                     }
+                     if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                         .hasMatch(value)) {
+                       return ("Please Enter a valid email");
+                     }
+                     return null;
+                    },
+
+                    style: TextStyle(
+                        color: Colors.white
+                    ),
+
+                    decoration:decortemplate("Enter email")
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+
+
+
+
+                 //PASSWORD
+                 TextFormField(
+                    controller: passwd,
+                     obscureText: true,
+                     validator: (value) {
+                       RegExp regex = new RegExp(r'^.{6,}$');
+                       if (value!.isEmpty) {
+                         return ("Password is required for login");
+                       }
+                       if (!regex.hasMatch(value)) {
+                         return ("Enter Valid Password(Min. 6 Character)");
+                       }
+                     },
+                     onSaved: (value){
+                       passwd.text=value!;
+                     },
+
+
+
+
+
+                    style: TextStyle(
+                        color: Colors.white
+                    ),
+                    decoration: decortemplate("Enter password")
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("Forgot Password?",style: TextStyle(
+                        color: Colors.redAccent[400]
+                    ),),
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),SizedBox(
+            height: 70,
+            width: 330,
+            child: ElevatedButton(onPressed: () {
+              signIn(emailid.text,passwd.text);
+
+            },
+              child: Text("SIGN IN",style: TextStyle(fontSize: 20,),),
+              style: ElevatedButton.styleFrom(
+                  primary: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40)
+                  ),
+
+              ),
+
+            ),
+          )
+               ,SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("New Here ? ",style: TextStyle(fontSize: 20,
+                        color: Colors.white)),
+                    InkWell(onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>signup()));
+                    },
+                        child:Text("Register",style: TextStyle(fontSize: 20,
+                        color: Colors.blue,decoration: TextDecoration.underline
+                    ),))
+                  ],
+                )
+
+
+
+
+
+              ],
+            ),
+          ),
+        ),
+
+      ),
+
+
+    );
+
+
+
+
+
+
+  }
+ void signIn(String email, String password) async {
+   if (_formkey.currentState!.validate()) {
+     await _auth
+         .signInWithEmailAndPassword(email: email, password: password)
+         .then((uid) => {
+       Fluttertoast.showToast(msg: "Login Successful"),
+       Navigator.of(context).pushReplacement(
+           MaterialPageRoute(builder: (context) => ho(email: email.toString(), name: ''))),
+     })
+         .catchError((e) {
+       Fluttertoast.showToast(msg: e!.message);
+     });
+   }
+ }
+}
+Output:
+
+        
+
+
+
+
+
+      
+
+
+
+
+Result:
+        An application that uses Layout Managers and event listeners has been developed and executed successfully.
+
+
+
+EXP NO: 03                                                                                                                 Name: 1
+DATE:  16/8/21                                                                                                                        Roll No: 1 
+
+                            Develop a Native Calculator Application 
+Aim: 
+          To develop a native calculator application.
+Problem Description:
+                              Calculator is an application that allows us to perform simple mathematical functions. This simple calculator allows addition, subtraction, multiplication and division of numbers and displays its result.
+Basics of Topic:
+Flutter is an open-source UI software development kit created by Google. It is used to develop cross platform applications for Android, iOS, Linux, Mac, Windows, Google Fuchsia, and the web from a single codebase. Math expression package is used to evaluate each mathematical expression.
+Source Code:
+main.dart
+import 'package:calculator/evaluate.dart';
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(
+    home: CalcHome(),
+    theme: new ThemeData(scaffoldBackgroundColor: Colors.black),
+  ));
+}
+
+class CalcHome extends StatelessWidget {
+  const CalcHome({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("My Calculator"),
+        ),
+        body: Textview(""));
+  }
+}
+
+// ignore: must_be_immutable
+class Textview extends StatefulWidget {
+  String value;
+  Textview(this.value);
+
+  @override
+  _TextviewState createState() => _TextviewState();
+}
+
+class _TextviewState extends State<Textview> {
+  void change(name) {
+    if (name == '=') {
+      setState(() {
+        widget.value = evaluation(widget.value);
+      });
+    } else {
+      setState(() {
+        widget.value = widget.value + name;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 30,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              widget.value,
+              style: TextStyle(fontSize: 50, color: Colors.white),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 114,
+        ),
+        Row(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ColumnWidget("7", change),
+                ColumnWidget("4", change),
+                ColumnWidget("1", change),
+                ColumnWidget("0", change)
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ColumnWidget("8", change),
+                ColumnWidget("5", change),
+                ColumnWidget("2", change),
+                ColumnWidget(".", change)
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ColumnWidget("9", change),
+                ColumnWidget("6", change),
+                ColumnWidget("3", change),
+                ColumnWidget("=", change)
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  width: 111,
+                  height: 80,
+                  color: Colors.black,
+                  child: Center(
+                      child: IconButton(
+                    splashColor: Colors.blue,
+                    onPressed: () {
+                      setState(() {
+                        if (widget.value.length > 0) {
+                          widget.value = widget.value
+                              .substring(0, widget.value.length - 1);
+                        }
+                      });
+                    },
+                    icon: Icon(
+                      Icons.backspace,
+                      color: Colors.blueAccent,
+                    ),
+                  )),
+                ),
+                Operators("/", change),
+                Operators("*", change),
+                Operators("-", change),
+                Operators("+", change)
+              ],
+            )
+          ],
+        ),
+      ],
+    );
+  }
+}
+class ColumnWidget extends StatelessWidget {
+  final String name;
+  final ValueChanged<String> update;
+  ColumnWidget(this.name, this.update);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 100,
+      height: 100,
+      child: Center(
+        child: TextButton(
+          onPressed: () {
+            update(name);
+          },
+          child: Text(
+            name,
+            style: TextStyle(color: Colors.white, fontSize: 50),
+          ),
+        ),
+      ),
+      color: Colors.black,
+    );
+  }
+}
+
+class Operators extends StatelessWidget {
+  final String name;
+  final ValueChanged<String> update;
+
+  Operators(this.name, this.update);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 111,
+      height: 80,
+      child: Center(
+        child: TextButton(
+          onPressed: () {
+            update(name);
+          },
+          child: Text(
+            name,
+            style: TextStyle(color: Colors.blueAccent, fontSize: 40),
+          ),
+        ),
+      ),
+      color: Colors.black,
+    );
+  }
+}
+evaluate.dart
+import 'package:math_expressions/math_expressions.dart';
+
+String evaluation(String s) {
+  Parser p = Parser();
+
+  Expression exp = p.parse(s);
+
+  double eval = exp.evaluate(EvaluationType.REAL, ContextModel());
+  if (eval - eval.toInt() == 0) {
+    return eval.toInt().toString();
+  }
+  print(eval);
+  return eval.toStringAsFixed(3);
+}
+Output:
+   Mathematical expression is entered  and result is shown 
+             
+Result:
+         A Native Calculator Application has been developed and executed successfully.
+
+EXP NO: 04                                                                                                                 Name: 1
+DATE: 23/8/21                                                                                                                         Roll No: 1  
+         
+        Develop an Application that draws basic Graphical Primitives on the 
+                                                          screen 
+Aim:
+       To Develop an Application that draws basic Graphical Primitives on the screen.
+Problem Description:
+Graphics Primitive is a basic object that is essential for the creation or construction of complex images. Main goal is to create the application that facilitates users to draw the basic graphical primitives.
+Basics of Topic:
+Flutter is an open-source UI software development kit created by Google. It is used to develop cross platform applications for Android, iOS, Linux, Mac, Windows, Google Fuchsia, and the web from a single codebase. 
+Source Code:
+Main.dart
+import 'dart:ffi';
+import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Paint APP',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(),
+    );
+  }
+}
+
+class DrawingArea {
+  Offset point;
+  Paint areaPaint;
+  DrawingArea({required this.point, required this.areaPaint});
+}
+
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  List<DrawingArea> points = [];
+  late Color selectedColor;
+  late double strokeWidth;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    selectedColor = Colors.black;
+    strokeWidth = 2.0;
+  }
+
+  void selectColor() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Pick a color!'),
+          content: SingleChildScrollView(
+            child: BlockPicker(
+              pickerColor: selectedColor,
+              onColorChanged: (color) {
+                this.setState(() {
+                  selectedColor = color;
+                });
+              },
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    return Scaffold(
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                  Color.fromRGBO(138, 35, 135, 1.0),
+                  Color.fromRGBO(233, 64, 87, 1.0),
+                  Color.fromRGBO(242, 133, 33, 1.0),
+                ])),
+          ),
+          Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: width * 0.80,
+                  height: height * 0.80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.4),
+                            blurRadius: 5.0,
+                            spreadRadius: 1.0)
+                      ]),
+                  child: GestureDetector(
+                    onPanDown: (details) {
+                      this.setState(() {
+                        points.add(DrawingArea(
+                            point: details.localPosition,
+                            areaPaint: Paint()
+                              ..color = selectedColor
+                              ..strokeWidth = strokeWidth
+                              ..isAntiAlias = true
+                              ..strokeCap = StrokeCap.round));
+                      });
+                    },
+                    onPanUpdate: (details) {
+                      this.setState(() {
+                        points.add(DrawingArea(
+                            point: details.localPosition,
+                            areaPaint: Paint()
+                              ..color = selectedColor
+                              ..strokeWidth = strokeWidth
+                              ..isAntiAlias = true
+                              ..strokeCap = StrokeCap.round));
+                      });
+                    },
+                    onPanEnd: (details) {
+                      this.setState(() {
+                        points.add(DrawingArea(
+                            point: Offset.infinite, areaPaint: Paint()));
+                      });
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      child: CustomPaint(
+                        painter: MyCustomPainter(points: points),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: width * 0.80,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                  child: Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            selectColor();
+                          },
+                          icon: Icon(
+                            Icons.color_lens,
+                            color: selectedColor,
+                          )),
+                      Expanded(
+                          child: Slider(
+                              min: 1.0,
+                              max: 7.0,
+                              activeColor: selectedColor,
+                              value: strokeWidth,
+                              onChanged: (width) {
+                                this.setState(() {
+                                  strokeWidth = width;
+                                });
+                              })),
+                      IconButton(
+                          onPressed: () {
+                            points.clear();
+                          },
+                          icon: Icon(Icons.layers_clear)),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class MyCustomPainter extends CustomPainter {
+  List<DrawingArea> points;
+
+  MyCustomPainter({required this.points});
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint background = Paint()..color = Colors.white;
+    Rect rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    canvas.drawRect(rect, background);
+
+    for (int i = 0; i < points.length - 1; i++) {
+      if (points[i].point != Offset.infinite &&
+          points[i + 1].point != Offset.infinite) {
+        canvas.drawLine(
+            points[i].point, points[i + 1].point, points[i].areaPaint);
+      } else if (points[i].point != Offset.infinite &&
+          points[i + 1].point == Offset.infinite) {
+        canvas.drawPoints(
+            PointMode.points, [points[i].point], points[i].areaPaint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+
+
+
+
+
+
+
+Output:
+          
+
+
+
+
+
+Result:
+        An Application that draws basic Graphical Primitives on the screen has been developed and executed successfully.
+
+
+EXP NO:05                                                                                                                  Name: 1
+DATE: 6/9/21                                                                                                                           Roll No: 1  
+         
+                  Develop an Application that makes use of Database
+Aim:
+       To Develop an Application that makes use of Database.
+Problem Description: 
+A student mark database is the collection of information that is gathered from each student. The database may include information like the students rollno, name and marks. It also aims in modifying the records and deleting the records. 
+Basics of the topic: 
+Android Studio is the official integrated development environment for Google's Android operating system, built on JetBrains' IntelliJ IDEA software and designed specifically for Android development.
+Source Code:
+MainActivity.java
+package com.example.ex6database;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+public class MainActivity extends  AppCompatActivity implements android.view.View.OnClickListener {
+
+    EditText Rollno,Name,Marks;
+    Button Insert,Delete,Update,View,ViewAll;
+    SQLiteDatabase db;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Rollno=(EditText)findViewById(R.id.Rollno);
+        Name=(EditText)findViewById(R.id.Name);
+        Marks=(EditText)findViewById(R.id.Marks);
+        Insert=(Button)findViewById(R.id.Insert);
+        Delete=(Button)findViewById(R.id.Delete);
+        Update=(Button)findViewById(R.id.Update);
+        View=(Button)findViewById(R.id.View);
+        ViewAll=(Button)findViewById(R.id.ViewAll);
+
+        Insert.setOnClickListener(this);
+        Delete.setOnClickListener(this);
+        Update.setOnClickListener(this);
+        View.setOnClickListener(this);
+        ViewAll.setOnClickListener(this);
+
+        // Creating database and table
+        db=openOrCreateDatabase("StudentDB", Context.MODE_PRIVATE, null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS student(rollno VARCHAR,name VARCHAR,marks VARCHAR);");
+
+    }
+    @Override
+    public void onClick(android.view.View view)
+    {
+        // Inserting a record to the Student table
+        if(view==Insert)
+        {
+            // Checking for empty fields
+            if(Rollno.getText().toString().trim().length()==0||
+                    Name.getText().toString().trim().length()==0||
+                    Marks.getText().toString().trim().length()==0)
+            {
+                showMessage("Error", "Please enter all values");
+                return;
+            }
+            db.execSQL("INSERT INTO student VALUES('"+Rollno.getText()+"','"+Name.getText()+
+                    "','"+Marks.getText()+"');");
+            showMessage("Success", "Record added");
+            clearText();
+        }
+        // Deleting a record from the Student table
+        if(view==Delete)
+        {
+            // Checking for empty roll number
+            if(Rollno.getText().toString().trim().length()==0)
+            {
+                showMessage("Error", "Please enter Rollno");
+                return;
+            }
+            Cursor c=db.rawQuery("SELECT * FROM student WHERE rollno='"+Rollno.getText()+"'", null);
+            if(c.moveToFirst())
+            {
+                db.execSQL("DELETE FROM student WHERE rollno='"+Rollno.getText()+"'");
+                showMessage("Success", "Record Deleted");
+            }
+            else
+            {
+                showMessage("Error", "Invalid Rollno");
+            }
+            clearText();
+        }
+        // Updating a record in the Student table
+        if(view==Update)
+        {
+            // Checking for empty roll number
+            if(Rollno.getText().toString().trim().length()==0)
+            {
+                showMessage("Error", "Please enter Rollno");
+                return;
+            }
+            Cursor c=db.rawQuery("SELECT * FROM student WHERE rollno='"+Rollno.getText()+"'", null);
+            if(c.moveToFirst()) {
+                db.execSQL("UPDATE student SET name='" + Name.getText() + "',marks='" + Marks.getText() +
+                        "' WHERE rollno='"+Rollno.getText()+"'");
+                showMessage("Success", "Record Modified");
+            }
+            else {
+                showMessage("Error", "Invalid Rollno");
+            }
+            clearText();
+        }
+        // Display a record from the Student table
+        if(view==View)
+        {
+            // Checking for empty roll number
+            if(Rollno.getText().toString().trim().length()==0)
+            {
+                showMessage("Error", "Please enter Rollno");
+                return;
+            }
+            Cursor c=db.rawQuery("SELECT * FROM student WHERE rollno='"+Rollno.getText()+"'", null);
+            if(c.moveToFirst())
+            {
+                Name.setText(c.getString(1));
+                Marks.setText(c.getString(2));
+            }
+            else
+            {
+                showMessage("Error", "Invalid Rollno");
+                clearText();
+            }
+        }
+        // Displaying all the records
+        if(view==ViewAll)
+        {
+            Cursor c=db.rawQuery("SELECT * FROM student", null);
+            if(c.getCount()==0)
+            {
+                showMessage("Error", "No records found");
+                return;
+            }
+            StringBuffer buffer=new StringBuffer();
+            while(c.moveToNext())
+            {
+                buffer.append("Rollno: "+c.getString(0)+"\n");
+                buffer.append("Name: "+c.getString(1)+"\n");
+                buffer.append("Marks: "+c.getString(2)+"\n\n");
+            }
+            showMessage("Student Details", buffer.toString());
+        }
+    }
+    public void showMessage(String title,String message)
+    {
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.show();
+    }
+    public void clearText()
+    {
+        Rollno.setText("");
+        Name.setText("");
+        Marks.setText("");
+        Rollno.requestFocus();
+    }
+}
+
+activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_x="50dp"
+    android:layout_y="20dp"
+    android:text="Student Details"
+    android:textSize="30sp" />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_x="20dp"
+    android:layout_y="110dp"
+    android:text="Enter Rollno:"
+    android:textSize="20sp" />
+
+<EditText
+    android:id="@+id/Rollno"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    android:layout_x="175dp"
+    android:layout_y="100dp"
+    android:inputType="number"
+    android:textSize="20sp" />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_x="20dp"
+    android:layout_y="160dp"
+    android:text="Enter Name:"
+    android:textSize="20sp" />
+
+<EditText
+    android:id="@+id/Name"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    android:layout_x="175dp"
+    android:layout_y="150dp"
+    android:inputType="text"
+    android:textSize="20sp" />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_x="20dp"
+    android:layout_y="210dp"
+    android:text="Enter Marks:"
+    android:textSize="20sp" />
+
+<EditText
+    android:id="@+id/Marks"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    android:layout_x="175dp"
+    android:layout_y="200dp"
+    android:inputType="number"
+    android:textSize="20sp" />
+
+<Button
+    android:id="@+id/Insert"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    android:layout_x="25dp"
+    android:layout_y="300dp"
+    android:text="Insert"
+    android:textSize="30dp" />
+
+<Button
+    android:id="@+id/Delete"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    android:layout_x="200dp"
+    android:layout_y="300dp"
+    android:text="Delete"
+    android:textSize="28dp" />
+
+<Button
+    android:id="@+id/Update"
+    android:layout_width="160dp"
+    android:layout_height="wrap_content"
+    android:layout_x="25dp"
+    android:layout_y="400dp"
+    android:text="Update"
+    android:textSize="28dp" />
+
+<Button
+    android:id="@+id/View"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    android:layout_x="200dp"
+    android:layout_y="400dp"
+    android:text="View"
+    android:textSize="30dp" />
+
+<Button
+    android:id="@+id/ViewAll"
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    android:layout_x="100dp"
+    android:layout_y="500dp"
+    android:text="View All"
+    android:textSize="30dp" />
+
+</AbsoluteLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Output:
+
+Inserting records and viewing the records
+
+
+               
+
+Modifying records
+
+      
+
+
+
+Deleting the records                                         Displaying records
+
+             
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+Result:
+              Thus a Simple Android Application that makes use of Database is developed and executed successfully.
+
+EXP NO: 06                                                                                                                 Name: 1
+DATE: 13/09/21                                                                                                                      Reg No: 1 
+         
+Develop an application that makes use of RSS Feed.
+
+Aim:
+       To develop an Android Application that makes use of RSS Feed.
+Problem Description:
+An RSS feed is a file that contains a summary of updates from a website, often in the form of a list of articles with links. RSS stands for Really Simple Syndication, and it offers an easy way to stay up to date on new content from websites you care about.
+Basics of the topic: 
+Android Studio is the official integrated development environment for Google's Android operating system, built on JetBrains' IntelliJ IDEA software and designed specifically for Android development.
+Source Code:
+activity_main.xml:
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+
+
+
+
+AndroidManifest.xml:
+// In AndroidManifest,xml file Internet Permission must be added. before application as done below
+
+<uses-permission android:name="android.permission.INTERNET"/>
+
+<application>
+.
+.
+.
+</application>
+
+MainActivity.java:
+
+package com.example.ex6_rss_feed;
+
+import android.app.ListActivity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends ListActivity {
+
+    List headlines;
+    List links;
+
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //setContentView(R.layout.activity_main);
+        new MyAsyncTask().execute();
+
+    }
+
+    class MyAsyncTask extends AsyncTask<Object,Void, ArrayAdapter>
+    {
+
+        @Override
+
+        protected ArrayAdapter doInBackground(Object[] params)
+
+        {
+
+            headlines = new ArrayList();
+
+            links = new ArrayList();
+
+            try{
+
+                URL url = new URL("https://codingconnect.net/feed");
+                XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+                factory.setNamespaceAware(false);
+                XmlPullParser xpp = factory.newPullParser();
+
+                // We will get the XML from an input stream
+                xpp.setInput(getInputStream(url), "UTF_8");
+                boolean insideItem = false;
+
+                // Returns the type of current event: START_TAG, END_TAG, etc..
+                int eventType = xpp.getEventType();
+                while (eventType != XmlPullParser.END_DOCUMENT)
+                {
+
+                    if (eventType == XmlPullParser.START_TAG)
+                    {
+                        if (xpp.getName().equalsIgnoreCase("item"))
+                        {
+                            insideItem = true;
+                        }
+                        else if (xpp.getName().equalsIgnoreCase("title"))
+
+                        {
+                            if (insideItem)
+                                headlines.add(xpp.nextText()); //extract the headline
+                        }
+                        else if (xpp.getName().equalsIgnoreCase("link"))
+                        {
+                            if (insideItem)
+
+                                links.add(xpp.nextText()); //extract the link of article
+                        }
+                    }
+                    else if(eventType==XmlPullParser.END_TAG && xpp.getName().equalsIgnoreCase("item"))
+                    {
+                        insideItem=false;
+                    }
+                    eventType = xpp.next(); //move to next element
+                }
+            } catch (IOException | XmlPullParserException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(ArrayAdapter adapter)
+
+        {
+
+            adapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, headlines);
+            setListAdapter(adapter);
+
+        }
+
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id)
+    {
+        Uri uri = Uri.parse((links.get(position)).toString());
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+
+
+
+    public InputStream getInputStream(URL url)
+    {
+        try
+        {
+
+            return url.openConnection().getInputStream();
+
+        }
+
+        catch (IOException e)
+
+        {
+
+            return null;
+
+        }
+
+    }
+}
+
+
+Output:       
+On clicking “C++ program for Cosine Series” will redirect to the respected page.    
+                              
+             
+                     
+
+
+Result:
+Thus Android Application that makes use of RSS Feed is developed and executed successfully.
+EXP NO: 07                                                                                                                 Name: 1
+DATE: 18/09/21                                                                                                                       Roll No: 1
+Implement an application that implements Multi-threading.
+Aim:
+        To Implement an application that implements Multi-threading.
+Problem Description: 
+Multithreading is a model of program execution that allows for multiple threads to be created within a process, executing independently but concurrently sharing process resources. Depending on the hardware, threads can run fully parallel if they are distributed to their own CPU core. 
+Basics of the topic: 
+Android Studio is the official integrated development environment for Google's Android operating system, built on JetBrains' IntelliJ IDEA software and designed specifically for Android development.
+Source Code:
+activity_main.xml:
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_margin="50dp"
+        android:layout_gravity="center" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_gravity="center"
+        android:text="Click to view Image 1" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_gravity="center"
+        android:text="Click to view image 2" />
+
+</LinearLayout>
+
+MainActivity.java:
+package com.example.ex7_multithreading;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+
+public class MainActivity extends AppCompatActivity {
+    ImageView img;
+    Button bt1,bt2;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+        bt1 = (Button)findViewById(R.id.button);
+        bt2= (Button) findViewById(R.id.button2);
+        img = (ImageView)findViewById(R.id.imageView);
+
+        bt1.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                new Thread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        img.post(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                img.setImageResource(R.drawable.india);
+                            }
+                        });
+                    }
+                }).start();
+            }
+        });
+        bt2.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                new Thread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        img.post(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                img.setImageResource(R.drawable.chennai);
+                            }
+                        });
+                    }
+                }).start();
+            }
+        });
+    }
+}
+Output:
+
+
+
+No image is loaded                     After clicking view image 1      After clicking view image 2
+          
+                       
+
+
+
+
+
+
+
+
+Result:
+           An application that implements Multi-threading has been developed and executed.
+
+
+EXP NO: 08                                                                                                                 Name: 1
+DATE: 25/9/21                                                                                                                         Roll No: 1
+               Develop a native application that uses GPS location information.
+Aim:
+       To develop a native application that uses GPS location information.
+Problem Description: 
+The Global Positioning System (GPS) is a U.S.-owned utility that provides users with positioning, navigation, and timing (PNT) services. Our aim is to show latitude and longitude of the user with the help of GPS.
+Basics of the topic: 
+Android Studio is the official integrated development environment for Google's Android operating system, built on JetBrains' IntelliJ IDEA software and designed specifically for Android development.
+Source Code:
+Activity Main.xml:
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_marginBottom="1dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="Latitude" />
+
+        <TextView
+            android:id="@+id/txtlat"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:text="Longitude" />
+
+        <TextView
+            android:id="@+id/txtlong"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:text="" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+MainActivity.java:
+package com.example.ex8gps;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
+import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity implements LocationListener {
+
+    LocationManager lmanager;
+    String provider;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+            }
+            else init();
+
+        } else {
+            init();
+        }
+    }
+
+        public void init(){
+            lmanager= (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+            Criteria criteria=new Criteria();
+            provider= lmanager.getBestProvider(criteria,false);
+
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED)
+                return;
+
+            if(provider!=null && !provider.equals("")){
+                Location location= lmanager.getLastKnownLocation(provider);
+                lmanager.requestLocationUpdates(provider, 100, 1, this);
+                if(location!=null){
+                    onLocationChanged(location);
+                }
+                else{
+                    Toast.makeText(getBaseContext(),"Locationnotavailable!!", Toast.LENGTH_LONG).show();
+                }
+            }
+            else{
+                Toast.makeText(getBaseContext(),"NoProviderfound!!", Toast.LENGTH_LONG).show();
+            }
+        }
+
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 0 && grantResults.length == 2) {
+            init();
+        }
+        else Toast.makeText(getBaseContext(), "Required permissions not granted!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        TextView T1= (TextView)findViewById(R.id.txtlat);
+        TextView T2= (TextView)findViewById(R.id.txtlong);
+
+        T1.setText(""+ location.getLatitude());
+        T2.setText(""+ location.getLongitude());
+
+    }
+
+}
+
+AndroidManifest.xml:
+Declare the necessary permission required for getting GPS  before the application tag in AndroidManifest.xml file
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+	<application> 
+	.
+	</application>		
+Output:
+                                                   
+
+
+
+
+
+
+
+
+
+Result:
+           An application that implements a native application that uses GPS location information has been developed and executed.
+
+EXP NO:09                                                                                                                  Name: 1
+DATE: 4/10/21                                                                                                                         Roll No: 1
+                Implement an application that writes data to the SD card.
+Aim:
+       To implement an application that writes data to the SD card.
+Problem Description: 
+An SD card relies on flash memory storage chips to be able to store data. Flash memory is the same kind of technology that is used in USB flash drives, and it is also being used in highspeed desktop computers as well.
+Basics of the topic: 
+Android Studio is the official integrated development environment for Google's Android operating system, built on JetBrains' IntelliJ IDEA software and designed specifically for Android development.
+Source Code:
+Activity_main.xml:
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="24dp"
+        android:ems="10" >
+        <requestFocus />
+    </EditText>
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/editText1"
+        android:layout_below="@+id/editText1"
+        android:layout_marginTop="24dp"
+        android:ems="10" />
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/editText1"
+        android:layout_alignBottom="@+id/editText1"
+        android:layout_alignParentLeft="true"
+        android:text="File Name:" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/editText2"
+        android:layout_alignBottom="@+id/editText2"
+        android:layout_alignParentLeft="true"
+        android:text="Data:" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText2"
+        android:layout_alignLeft="@+id/editText2"
+        android:layout_marginLeft="39dp"
+        android:layout_marginTop="30dp"
+        android:text="save" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button1"
+        android:layout_alignBottom="@+id/button1"
+        android:layout_toRightOf="@+id/button1"
+        android:text="read" />
+    <EditText
+        android:id="@+id/editText4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Retrived data"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="271dp"
+        android:layout_marginRight="91dp"
+        android:ems="10">
+        <requestFocus />
+    </EditText>
+</RelativeLayout>
+MainActivity.java:
+package com.example.ex9sdcard;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Context;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+public class MainActivity extends AppCompatActivity {
+    EditText editTextFileName,editTextData,e1;
+    Button saveButton,readButton;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        editTextFileName=findViewById(R.id.editText1);
+        editTextData=findViewById(R.id.editText2);
+        saveButton=findViewById(R.id.button1);
+        readButton=findViewById(R.id.button2);
+        e1 = findViewById(R.id.editText4);
+        saveButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View arg0) {
+                String filename=editTextFileName.getText().toString();
+                String data=editTextData.getText().toString();
+                FileOutputStream fos;
+                try {
+                    fos = openFileOutput(filename, Context.MODE_APPEND);
+                    fos.write(data.getBytes());
+                    fos.close();
+                    Toast.makeText(getApplicationContext(),filename + " saved",
+                            Toast.LENGTH_LONG).show();
+                } catch (FileNotFoundException e) {e.printStackTrace();}
+                catch (IOException e) {e.printStackTrace();}
+            } });
+        readButton.setOnClickListener(new View.OnClickListener(){
+                                          @Override
+                  public void onClick(View arg0) {
+                      String filename=editTextFileName.getText().toString();
+                      StringBuffer stringBuffer = new StringBuffer();
+                      try {
+                          BufferedReader inputReader = new BufferedReader(new InputStreamReader(
+                                  openFileInput(filename)));
+                          String inputString;
+                          while ((inputString = inputReader.readLine()) != null) {
+                              stringBuffer.append(inputString + "\n");
+                          }
+                      } catch (IOException e) {
+                          e.printStackTrace(); }
+                      Toast.makeText(getApplicationContext(),stringBuffer.toString(),Toast.LENGTH_LONG).show();
+                      e1.setText(stringBuffer.toString().trim());
+                  }}); }}
+Output:
+           when save button is clicked                     when read button is clicked
+                          
+
+Result:
+	An application that will be used to write data in SD card is done.
+EXP NO:10                                                                                                                  Name: 1
+DATE: 11/10/21                                                                                                                       Roll No: 1
+          Implement an application that creates an alert upon receiving message.
+Aim:
+       To Implement an application that creates an alert upon receiving a message.
+Problem Description: 
+The primary function or purpose of an alert/notification system is to quickly alert responders of potential threats or emergency situations and to provide direction on how to respond to any alerts. 
+Basics of the topic: 
+Android Studio is the official integrated development environment for Google's Android operating system, built on JetBrains' IntelliJ IDEA software and designed specifically for Android development.
+Source Code:
+Activity_main.xml:
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Message"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:layout_gravity="center"
+        android:text="Notify"
+        android:textSize="30sp"/>
+</LinearLayout>
+
+MainActivity.java:
+package com.example.ex10notification;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+public class MainActivity extends AppCompatActivity {
+    Button notify;
+    EditText e;
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        notify= (Button) findViewById(R.id.button);
+        e= (EditText) findViewById(R.id.editText);
+
+        notify.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                showNotification("Message Notification",e.getText().toString());
+            }
+
+        });
+    }
+
+    void showNotification(String title, String message) {
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("YOUR_CHANNEL_ID",
+                    "YOUR_CHANNEL_NAME",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("YOUR_NOTIFICATION_CHANNEL_DESCRIPTION");
+            mNotificationManager.createNotificationChannel(channel);
+        }
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "YOUR_CHANNEL_ID")
+                .setSmallIcon(R.mipmap.ic_launcher) // notification icon
+                .setContentTitle(title) // title for notification
+                .setContentText(message)// message for notification
+                .setAutoCancel(true); // clear notification after click
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        PendingIntent pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(pi);
+        mNotificationManager.notify(0, mBuilder.build());
+    }
+
+}
+
+Output:
+                           
+
+
+
+
+
+
+
+
+
+Result:
+           An application that implements an alert upon receiving a message has been developed and executed.
+
+
+EXP NO:11                                                                                                                  Name: 1
+DATE: 18/10/21                                                                                                                       Roll No: 1
+                     Write a mobile application that creates an alarm clock.
+Aim:
+       To Implement a mobile application that creates an alarm clock.
+Problem Description: 
+An alarm clock is a clock that is designed to alert an individual or group of individuals at a specified time. The primary function of these clocks is to awaken people from their night's sleep or short naps; they are sometimes used for other reminders as well. 
+Basics of the topic: 
+Android Studio is the official integrated development environment for Google's Android operating system, built on JetBrains' IntelliJ IDEA software and designed specifically for Android development.
+Source Code:
+Activity_main.xml:
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:checked="false"
+        android:onClick="OnToggleClicked" />
+</LinearLayout>
+
+
+
+
+
+MainActivity.java:
+package com.example.ex11alarm;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.TimePicker;
+import android.widget.Toast;
+import android.widget.ToggleButton;
+
+import java.util.Calendar;
+
+public class MainActivity extends AppCompatActivity {
+
+    TimePicker alarmTimePicker;
+    PendingIntent pendingIntent;
+    AlarmManager alarmManager;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+    }
+
+    public void OnToggleClicked(View view)
+    {
+        long time;
+        if (((ToggleButton) view).isChecked())
+        {
+            Toast.makeText(MainActivity.this, "ALARM ON", Toast.LENGTH_SHORT).show();
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getCurrentHour());
+            calendar.set(Calendar.MINUTE, alarmTimePicker.getCurrentMinute());
+            Intent intent = new Intent(this, AlarmReceiver.class);
+            pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+
+            time=(calendar.getTimeInMillis()-(calendar.getTimeInMillis()%60000));
+            if(System.currentTimeMillis()>time)
+            {
+                if (calendar.AM_PM == 0)
+                    time = time + (1000*60*60*12);
+                else
+                    time = time + (1000*60*60*24);
+            }
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 10000, pendingIntent);
+        }
+        else
+        {
+            alarmManager.cancel(pendingIntent);
+            Toast.makeText(MainActivity.this, "ALARM OFF", Toast.LENGTH_SHORT).show();
+        }
+    }
+}
+
+AndroidManifest.xml:
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.ex11alarm">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Ex11alarm">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <receiver android:name=".AlarmReceiver" >
+        </receiver>
+
+    </application>
+
+</manifest>
+AlarmReceiver.java:
+package com.example.ex11alarm;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.widget.Toast;
+
+public class AlarmReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        Toast.makeText(context, "Alarm! Wake up! Wake up!", Toast.LENGTH_LONG).show();
+        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        if (alarmUri == null)
+        {
+            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        }
+        Ringtone ringtone = RingtoneManager.getRingtone(context, alarmUri);
+        ringtone.play();
+
+    }
+}
+
+
+
+Output:
+           
+
+    
+
+
+
+
+     
+
+
+Result:
+           An application that implements a mobile application that creates an alarm clock has been developed and executed.
+
+
+EXP NO:12                                                                                                                  Name: 1
+DATE: 18/10/21                                                                                                                       Roll No: 1
+Multimedia Support
+
+Aim:
+To develop a gaming application using multimedia support
+Problem Description:
+To develop a tic-tac-toe game application in android with multimedia support
+Basics of the topic:
+The Android multimedia framework includes support for playing variety of common media types, so that you can easily integrate audio, video and images into your applications.
+
+Source Code:
+MainActivity.java:
+package com.example.tictactoe;
+import androidx.appcompat.app.AppCompatActivity; 
+import android.media.MediaPlayer;
+import android.os.Bundle; 
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageSwitcher; 
+import android.widget.ImageView; 
+import android.widget.TextView;
+import android.widget.Toast;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener { private Button[][] buttons = new Button[3][3];
+private boolean player1Turn = true; private int roundCount;
+private int player1Points;
+ private int player2Points;
+private TextView textViewPlayer1; 
+private TextView textViewPlayer2; 
+MediaPlayer winner;
+@Override
+protected void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); setContentView(R.layout.activity_main); textViewPlayer1 = findViewById(R.id.text_view_p1); textViewPlayer2 = findViewById(R.id.text_view_p2); for (int i = 0; i < 3; i++) {
+for (int j = 0; j < 3; j++) {
+String buttonID = "button_" + i + j;
+int resID = getResources().getIdentifier(buttonID, "id", getPackageName()); buttons[i][j] = findViewById(resID);
+buttons[i][j].setOnClickListener(this);
+}}
+Button buttonReset = findViewById(R.id.button_reset);
+buttonReset.setOnClickListener(new View.OnClickListener() { @Override
+public void onClick(View v) { resetGame();
+}
+});
+}
+
+@Override
+public void onClick(View v) {
+if (!((Button) v).getText().toString().equals("")) { return;
+}
+if (player1Turn) {
+// textViewPlayer1.setImageResource(R.drawable.yellow);
+((Button) v).setText("X");
+} else {
+((Button) v).setText("O");
+//textViewPlayer2.setImageResource(R.drawable.yellow);
+}
+roundCount++;
+if (checkForWin()) { if (player1Turn) {
+player1Wins();
+} else {
+player2Wins();
+}} else if (roundCount == 9) { draw();
+} else {
+player1Turn = !player1Turn;
+}}
+private boolean checkForWin() { String[][] field = new String[3][3];
+for (int i = 0; i < 3; i++) { for (int j = 0; j < 3; j++) {
+field[i][j] = buttons[i][j].getText().toString();
+}}
+for (int i = 0; i < 3; i++) {
+if (field[i][0].equals(field[i][1])
+&& field[i][0].equals(field[i][2])
+&& !field[i][0].equals("")) { return true;
+}}
+for (int i = 0; i < 3; i++) {
+if (field[0][i].equals(field[1][i])
+&& field[0][i].equals(field[2][i])
+&& !field[0][i].equals("")) { return true;
+}
+}
+
+if (field[0][0].equals(field[1][1])
+&& field[0][0].equals(field[2][2])
+&& !field[0][0].equals("")) { return true;
+}
+
+if (field[0][2].equals(field[1][1])
+&& field[0][2].equals(field[2][0])
+&& !field[0][2].equals("")) { return true;
+}
+
+return false;
+}
+private void player1Wins() { player1Points++;
+winner = MediaPlayer.create(MainActivity.this,R.raw.win); winner.start();
+Toast.makeText(this, "Player 1 wins!", Toast.LENGTH_SHORT).show(); updatePointsText();
+//winner.release();
+resetBoard();
+}
+private void player2Wins() { player2Points++;
+winner = MediaPlayer.create(MainActivity.this,R.raw.win); winner.start();
+Toast.makeText(this, "Player 2 wins!", Toast.LENGTH_SHORT).show(); updatePointsText();
+resetBoard();
+}private void draw() {
+Toast.makeText(this, "Draw!", Toast.LENGTH_SHORT).show(); resetBoard();
+}
+private void updatePointsText() { textViewPlayer1.setText("Player 1: " + player1Points); textViewPlayer2.setText("Player 2: " + player2Points);
+}
+private void resetBoard() { for (int i = 0; i < 3; i++) {
+for (int j = 0; j < 3; j++) { buttons[i][j].setText("");
+}}
+roundCount = 0; player1Turn = true;
+}
+private void resetGame() { player1Points = 0;
+player2Points = 0;
+updatePointsText(); resetBoard();
+}
+
+@Override
+protected void onSaveInstanceState(Bundle outState) { super.onSaveInstanceState(outState);
+outState.putInt("roundCount", roundCount); outState.putInt("player1Points", player1Points); outState.putInt("player2Points", player2Points); outState.putBoolean("player1Turn", player1Turn);
+}
+@Override
+protected void onRestoreInstanceState(Bundle savedInstanceState) { super.onRestoreInstanceState(savedInstanceState);
+roundCount = savedInstanceState.getInt("roundCount"); player1Points = savedInstanceState.getInt("player1Points"); player2Points = savedInstanceState.getInt("player2Points"); player1Turn = savedInstanceState.getBoolean("player1Turn");
+}}
+Activity_main.xml:
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent"
+android:orientation="vertical" 
+tools:context="com.example.tictactoe.MainActivity">
+<RelativeLayout 
+android:layout_width="match_parent"
+android:layout_height="wrap_content">
+<TextView 
+android:id="@+id/text_view_p1" 
+android:layout_width="fill_parent" 
+android:layout_height="wrap_content" 
+android:freezesText="true" 
+android:text="Player 1: 0" 
+android:textSize="30sp" />
+<TextView android:id="@+id/text_view_p2" 
+android:layout_width="fill_parent" 
+android:layout_height="wrap_content" 
+android:freezesText="true" 
+android:text="Player 1: 0"
+android:layout_below="@+id/text_view_p1" 
+android:textSize="30sp" />
+<Button
+android:id="@+id/button_reset" 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content" 
+android:layout_alignParentEnd="true" 
+android:layout_centerVertical="true" 
+android:layout_marginEnd="33dp" 
+android:text="reset" 
+android:layout_alignParentRight="true" 
+android:layout_marginRight="33dp" />
+</RelativeLayout>
+<LinearLayout android:layout_width="match_parent" 
+android:layout_height="0dp" 
+android:layout_weight="1">
+
+<Button
+android:id="@+id/button_00"
+android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:freezesText="true" android:textSize="60sp" />
+
+<Button
+android:id="@+id/button_01" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:freezesText="true" android:textSize="60sp" />
+
+<Button
+android:id="@+id/button_02" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:freezesText="true" android:textSize="60sp" />
+</LinearLayout>
+<LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+<Button
+android:id="@+id/button_10" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:freezesText="true" android:textSize="60sp" />
+
+<Button
+android:id="@+id/button_11" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:freezesText="true" android:textSize="60sp" />
+
+<Button
+android:id="@+id/button_12" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:freezesText="true" android:textSize="60sp" />
+
+</LinearLayout>
+<LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+
+<Button
+android:id="@+id/button_20" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:freezesText="true" android:textSize="60sp" />
+
+<Button
+android:id="@+id/button_21" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:freezesText="true" android:textSize="60sp" />
+ 
+<Button
+android:id="@+id/button_22" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:freezesText="true" android:textSize="60sp" />
+
+</LinearLayout>
+
+</LinearLayout>
+Output:
+ 
+
+Result:
+	The above code is executed and desired output is obtained.
+
+
+EXP NO:13                                                                                                                  Name: 1
+DATE:  18/10/21                                                                                                                      Roll No:1
+CONNECTIVITY VIA REST TO BACKEND SERVICES
+Aim:
+To develop an application for connectivity via REST to backend services.
+
+Problem Description:
+To develop an application in flutter for connecting backend services via REST
+
+Basics of the topic:
+Flutter provides http package to consume HTTP resources. HTTP is a future based library and uses await and async features. It provides many high level methods and simplifies the development of REST based mobile applications.
+Source Code:
+import 'dart:async'; import 'dart:convert';
+import 'package:flutter/material.dart'; import 'package:http/http.dart' as http; void main() {
+runApp(new MaterialApp( home:new MyApp()
+));
+}
+class MyApp extends StatefulWidget { @override
+_MyAppState createState() => _MyAppState();
+}
+class _MyAppState extends State<MyApp> {
+final String url="https://datausa.io/api/data?drilldowns=Nation&measures=Population"; Map content={};
+List data=[]; @override
+void initState() {
+// TODO: implement initState super.initState();
+this.getJsonData();
+}
+void getJsonData() async{
+var response = await http.get( Uri.parse(url),
+headers: {
+"Accept": "application/json"
+});
+print(response.body); setState(() {
+content=json.decode(response.body); data=content['data'];
+}); }
+
+@override
+Widget build(BuildContext context) { return Scaffold(
+appBar: new AppBar(
+title: Text("API Request"),), body: new ListView.builder( itemCount: data.length,
+itemBuilder: (BuildContext context,int index){ return new Container(
+child: new Center( child:new Column(
+crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
+new Card(
+child:new Container( child:Column(
+children: [new Text("Year:"+data[index]['Year']),
+new Text("Population:"+data[index]['Population'].toString())],), padding: const EdgeInsets.all(20.0)
+),)],)),);},),);}}
+Output:
+
+ 
+
+
+
+Result:
+
+The above code is executed and desired output is obtained.
+
+
+
+EXP NO:14                                                                                                                  Name: 1
+DATE: 23/10/21                                                                                                                       Roll No: 1
+
+Accelerometer
+Aim:
+To develop an application that will take advantage of underlying phone functionalities
+
+Problem Description:
+To develop an application in flutter that will use phone functionality to provide the acceleration and geo positioning of the device
+Basics of the topic:
+Accelerometers:
+
+Accelerometers measure linear acceleration and tilt angle. Single and multi-axis accelerometers detect the combined magnitude and direction of linear, rotational and gravitational acceleration. They can be used to provide limited motion sensing functionality.
+Geo-Positioning:
+
+The Geo location API is accessed via a call to navigator. Geo location , this will cause the user's browser to ask them for permission to access their location data. If they accept, then the browser will use the best available functionality on the device to access this information like GPS.
+Source Code:
+AndroidManifest.xml:
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.gestures_gps_accelerometer">
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<application android:allowBackup="true" android:icon="@mipmap/ic_launcher" android:label="@string/app_name"
+android:roundIcon="@mipmap/ic_launcher_round"
+android:supportsRtl="true" android:theme="@style/Theme.Gestures_GPS_Accelerometer">
+<activity android:name=".GPS"></activity>
+<activity android:name=".Accelerometer" />
+<activity android:name=".MainActivity">
+<intent-filter>
+<action android:name="android.intent.action.MAIN" />
+<category android:name="android.intent.category.LAUNCHER" />
+
+</intent-filter>
+</acitivity>
+</application>
+</manifest>
+activity_gps.xml:
+<?xml version="1.0" encoding="UTF-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout tools:context=".GPS" android:layout_height="match_parent" android:layout_width="match_parent" xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" app:layout_constraintVertical_bias="0.514" app:layout_constraintTop_toTopOf="parent"
+app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent" android:textAppearance="@style/TextAppearance.AppCompat.Large" android:text="Loading"
+android:id="@+id/gpstextView"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+activity_accelerometer.xml:
+<?xml version="1.0" encoding="UTF-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout tools:context=".Accelerometer" android:layout_height="match_parent"
+android:layout_width="match_parent" xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent" android:textAppearance="@style/TextAppearance.AppCompat.Large" android:text="Loading"
+android:id="@+id/accTextView"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+activity_main.xml:
+<?xml version="1.0" encoding="UTF-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout tools:context=".MainActivity" android:layout_height="match_parent"
+android:layout_width="match_parent" xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+<Button android:layout_height="wrap_content" android:layout_width="wrap_content" app:layout_constraintTop_toBottomOf="@+id/textView" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+android:text="Click here" android:id="@+id/button"/>
+<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+android:text="Click for Geopositioning, Long Press for Accelerometer" android:id="@+id/textView" app:layout_constraintTop_toTopOf="parent"
+app:layout_constraintBottom_toTopOf="@+id/button"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout
+Accelerometer.java:
+package com.example.gestures_gps_accelerometer; import androidx.appcompat.app.AppCompatActivity; import android.content.Context;
+import android.hardware.Sensor; import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener; import android.hardware.SensorManager; import android.os.Bundle;
+import android.widget.TextView;
+public class Accelerometer extends AppCompatActivity {
+
+private float xAcc = (float) 0.0, yAcc = (float) 0.0, zAcc = (float) 0.0; private int sensorAccuracy = 0;
+void updateTextView(){
+
+TextView tv = findViewById(R.id.accTextView); String toDisplay = "X-axis Acceleration: " + xAcc
++ "\n\nY-axis Acceleration: " + yAcc
++ "\n\nZ-axis Acceleration: "+ zAcc
++ "\n\nSensor Accuracy: " + sensorAccuracy;
+tv.setText(toDisplay);
+}
+@Override
+protected void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); setContentView(R.layout.activity_accelerometer);
+SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER); SensorEventListener sel = new SensorEventListener() {
+@Override
+public void onSensorChanged(SensorEvent event) { xAcc = event.values[0];
+yAcc = event.values[1]; zAcc = event.values[2]; updateTextView();
+}
+@Override
+public void onAccuracyChanged(Sensor sensor, int accuracy) { sensorAccuracy = accuracy;
+updateTextView(); }};
+sensorManager.registerListener(sel, sensor, SensorManager.SENSOR_DELAY_NORMAL);}}
+GPS.java:
+package com.example.gestures_gps_accelerometer; import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity; import androidx.core.app.ActivityCompat;
+import android.Manifest; import android.content.Context;
+import android.content.pm.PackageManager; import android.location.Location;
+import android.location.LocationListener; import android.location.LocationManager; import android.os.Bundle;
+import android.widget.TextView;
+
+public class GPS extends AppCompatActivity { @Override
+protected void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); setContentView(R.layout.activity_gps);
+if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+!= PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 101); }
+LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, new LocationListener() {
+@Override
+public void onLocationChanged(@NonNull Location location) { TextView tv = findViewById(R.id.gpstextView);
+String s = "Latitude: "+ location.getLatitude() +"\nLongitude: " + location.getLongitude(); tv.setText(s);} });}}
+MainActivity.java:
+package com.example.gestures_gps_accelerometer;
+import androidx.activity.result.contract.ActivityResultContracts; import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity; import androidx.core.app.ActivityCompat;
+import android.Manifest; import android.content.Context; import android.content.Intent;
+import android.content.pm.PackageManager; import android.location.Location;
+import android.location.LocationListener; import android.location.LocationManager; import android.os.Bundle;
+import android.view.View; import android.widget.Button; import android.widget.TextView;
+public class MainActivity extends AppCompatActivity { @Override
+protected void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); setContentView(R.layout.activity_main);
+Button btn = findViewById(R.id.button); btn.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+Intent intent = new Intent(MainActivity.this, GPS.class); startActivity(intent);} });
+btn.setOnLongClickListener(new View.OnLongClickListener() { @Override
+public boolean onLongClick(View v) {
+Intent intent = new Intent(MainActivity.this, Accelerometer.class); startActivity(intent);
+return true;
+}
+});
+}}
+Output:
+   
+
+Result:
+The above code is executed and desired output is obtained.
+
+
+
+
+
+EXP NO:15                                                                                                                  Name: 1
+DATE: 23/10/21                                                                                                                       Roll No:1
+Integrating Mobile Applications
+
+Aim:
+To develop an application for integrating mobile applications in the market
+
+Problem Description:
+To develop an application in flutter for integrating mobile applications with Facebook and Google for sign in.
+
+Basics of the topic:
+Facebook:
+The Facebook SDK is what allows mobile app developers to integrate Facebook within a mobile app. SDK stands for software development kit, and it allows for a website or app to integrate with Facebook seamlessly. Examples of what you can do with Facebook SDK include: Facebook Login functionality.
+
+Source Code:
+import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+void main() => runApp(FacebookApp());
+class FacebookApp extends StatefulWidget {
+const FacebookApp({Key? key}) : super(key: key);
+@override
+_FacebookAppState createState() => _FacebookAppState();
+}
+class _FacebookAppState extends State<FacebookApp> {
+Map? _userData;
+@override
+Widget build(BuildContext context) {
+return MaterialApp(
+home: Scaffold(
+appBar: AppBar(
+title: Text('Facebook (Logged ' + (_userData == null ? 'Out' : 'In') + ')')
+),
+body: Center(
+child: Column(
+children: [
+ElevatedButton(child: Text('Log In'),
+onPressed: () async {
+final result = await FacebookAuth.i.login(
+permissions: ["public_profile", "email"]
+);
+if (result.status == LoginStatus.success) {
+final userData = await FacebookAuth.i.getUserData(
+fields: "email,name",
+);
+setState(() {
+_userData = userData;
+});
+}
+}),
+ElevatedButton(child: Text('Log Out'),
+onPressed: () async {
+await FacebookAuth.i.logOut();
+setState(() {
+_userData = null;
+});
+}),],),),),);}}
+
+Output:
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Results:
+
+The above code is executed and required output is obtained 
+    
+
+
+                                                                                                                            
